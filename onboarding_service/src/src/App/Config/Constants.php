@@ -1,0 +1,18 @@
+<?php
+
+namespace METRIC\App\Config;
+
+class Constants {
+
+    const STATE_ERROR_IFRAME_VALIDAS2BOIDAS_OK = -1;
+    const STATE_ERROR_IFRAME_VALIDAS2BOIDAS_KO = -2;
+    const STATE_ESIGN_REFUSE = -3;
+    const STATE_ESIGN_LOW_SCORE  = -4;
+    const STATE_ESIGN_TIMEOUT_INACTIVITY = -5;
+    const STATE_ESIGN_TIMEOUT_CLOSE = -6;
+    const STATE_XPRESSID_OK = 1;
+    const STATE_XPRESSID_UPDATE_OK = 2;
+    const STATE_ESIGN_OK = 3;
+    const STATE_BOIDAS2ATFINITY_OK = 4;
+    const STATE_BOIDAS2ATFINITY_KO = 5;
+}

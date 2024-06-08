@@ -1,0 +1,10 @@
+FROM mysql:8.0.35-debian
+
+ENV MYSQL_ROOT_PASSWORD=25412435 \
+    MYSQL_DATABASE=integration_server \
+    MYSQL_USER=anselmo \
+    MYSQL_PASSWORD=25412435
+
+COPY ./setup.sql /docker-entrypoint-initdb.d/
+
+EXPOSE 3306

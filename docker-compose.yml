@@ -1,0 +1,239 @@
+version: '3.3'
+
+services:
+  proxy_nginx:
+    build:
+      context: ./proxy_service
+      dockerfile: Dockerfile.nginx
+    env_file:
+      - ./.env/.env.proxy
+    networks:
+      - bbvach_aws_services
+    ports:
+      - '10000:80'
+    volumes:
+      - ./proxy_service/src:/var/www/html
+      - ./proxy_service/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - proxyphp-fpm
+
+  proxyphp-fpm:
+    build:
+      context: ./proxy_service
+      dockerfile: Dockerfile.php-fpm
+    env_file:
+      - ./.env/.env.proxy
+    volumes:
+      - ./proxy_service/src:/var/www/html
+    networks:
+      - bbvach_aws_services
+
+  onboarding_nginx:
+    build:
+      context: ./onboarding_service
+      dockerfile: Dockerfile.nginx
+    env_file:
+      - ./.env/.env.onboarding
+    networks:
+      - bbvach_aws_services
+    ports:
+      - '10001:80'
+    volumes:
+      - ./onboarding_service/src:/var/www/html
+      - ./onboarding_service/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - onboardingphp-fpm
+  
+  onboardingphp-fpm:
+    build:
+      context: ./onboarding_service
+      dockerfile: Dockerfile.php-fpm
+    env_file:
+      - ./.env/.env.onboarding
+    #volumes:
+    #  - ./onboarding_service/src:/var/www/html
+    networks:
+      - bbvach_aws_services
+    depends_on:
+      - mysql_db
+
+  pdi_nginx:
+    build:
+      context: ./pdi_service
+      dockerfile: Dockerfile.nginx
+    env_file:
+      - ./.env/.env.pdi
+    networks:
+      - bbvach_aws_services
+    ports:
+      - '10008:80'
+    volumes:
+      - ./pdi_service/src:/var/www/html
+      - ./pdi_service/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - pdiphp-fpm
+  
+  pdiphp-fpm:
+    build:
+      context: ./pdi_service
+      dockerfile: Dockerfile.php-fpm
+    env_file:
+      - ./.env/.env.pdi
+    volumes:
+      - ./pdi_service/src:/var/www/html
+    networks:
+      - bbvach_aws_services
+    depends_on:
+      - mysql_db
+  
+  logger_nginx:
+    build:
+      context: ./logger_service
+      dockerfile: Dockerfile.nginx
+    env_file:
+      - ./.env/.env.logger
+    networks:
+      - bbvach_aws_services
+    ports:
+      - '10002:80'
+    volumes:
+      - ./logger_service/src:/var/www/html
+      - ./logger_service/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - loggerphp-fpm
+
+  loggerphp-fpm:
+    build:
+      context: ./logger_service
+      dockerfile: Dockerfile.php-fpm
+    env_file:
+      - ./.env/.env.logger
+    volumes:
+      - ./logger_service/src:/var/www/html
+    networks:
+      - bbvach_aws_services
+
+  mailer_nginx:
+    build:
+      context: ./mailer_service
+      dockerfile: Dockerfile.nginx
+    env_file:
+      - ./.env/.env.mailer
+    networks:
+      - bbvach_aws_services
+    ports:
+      - '10003:80'
+    volumes:
+      - ./mailer_service/src:/var/www/html
+      - ./mailer_service/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - mailerphp-fpm
+
+  mailerphp-fpm:
+    build:
+      context: ./mailer_service
+      dockerfile: Dockerfile.php-fpm
+    env_file:
+      - ./.env/.env.mailer
+    volumes:
+      - ./mailer_service/src:/var/www/html
+    networks:
+      - bbvach_aws_services
+    dns:
+      - 8.8.8.8
+
+  mysql_db:
+    build:
+      context: ./database_service
+      dockerfile: Dockerfile.mysql
+    env_file:
+      - ./.env/.env.msql
+    ports:
+      - '10004:3306'
+    networks:
+      - bbvach_aws_services
+
+  contact_nginx:
+    build:
+      context: ./contact_service
+      dockerfile: Dockerfile.nginx
+    env_file:
+      - ./.env/.env.contact
+    networks:
+      - bbvach_aws_services
+    ports:
+      - '10005:80'
+    volumes:
+      - ./contact_service/src:/var/www/html
+      - ./contact_service/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - contactphp-fpm
+
+  contactphp-fpm:
+    build:
+      context: ./contact_service
+      dockerfile: Dockerfile.php-fpm
+    env_file:
+      - ./.env/.env.contact
+    volumes:
+      - ./contact_service/src:/var/www/html
+    networks:
+      - bbvach_aws_services
+    
+  odoo_nginx:
+    build:
+      context: ./odoo_service
+      dockerfile: Dockerfile.nginx
+    env_file:
+      - ./.env/.env.odoo
+    networks:
+      - bbvach_aws_services
+    ports:
+      - '10006:80'
+    volumes:
+      - ./odoo_service/src:/var/www/html
+      - ./odoo_service/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - odoophp-fpm
+
+  odoophp-fpm:
+    build:
+      context: ./odoo_service
+      dockerfile: Dockerfile.php-fpm
+    env_file:
+      - ./.env/.env.odoo
+    volumes:
+      - ./odoo_service/src:/var/www/html
+    networks:
+      - bbvach_aws_services
+
+  test_nginx:
+    build:
+      context: ./test_service
+      dockerfile: Dockerfile.nginx
+    env_file:
+      - ./.env/.env.test
+    networks:
+      - bbvach_aws_services
+    ports:
+      - '10007:80'
+    volumes:
+      - ./test_service/src:/var/www/html
+      - ./test_service/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - loggerphp-fpm
+
+  testphp-fpm:
+    build:
+      context: ./test_service
+      dockerfile: Dockerfile.php-fpm
+    env_file:
+      - ./.env/.env.test
+    volumes:
+      - ./test_service/src:/var/www/html
+    networks:
+      - bbvach_aws_services
+
+networks:
+  bbvach_aws_services:
+    driver: bridge

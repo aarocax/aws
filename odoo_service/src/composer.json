@@ -1,0 +1,23 @@
+{
+    "name": "metric/logger_service",
+    "description": "servicio de log",
+    "type": "project",
+    "require": {
+        "monolog/monolog": "^3.5",
+        "darkaonline/ripcord": "^0.2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "METRIC\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "anselmo",
+            "email": "anselmo.aroca.ext@metricsalad.com"
+        }
+    ]
+}
